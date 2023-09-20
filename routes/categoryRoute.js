@@ -1,6 +1,6 @@
 const express = require("express");
 const {
-  getcategoryValidator,
+  getCategoryValidator,
   createCategoryValidator,
   updateCategoryValidator,
   deleteCategoryValidator,
@@ -26,7 +26,7 @@ router
   .post(createCategoryValidator, createCategory);
 router
   .route("/:id")
-  .get(getcategoryValidator, getCategory)
+  .get(getCategoryValidator, getCategory)
   .put(updateCategoryValidator, updateCategory)
   .delete(deleteCategoryValidator, deleteCategory);
 
