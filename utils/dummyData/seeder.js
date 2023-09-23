@@ -1,5 +1,5 @@
 const fs = require("fs");
-// require('colors');
+require("colors");
 const dotenv = require("dotenv");
 const Product = require("../../models/productModel");
 const dbConnection = require("../../config/database");
@@ -35,7 +35,8 @@ const destroyData = async () => {
   }
 };
 
-// node seeder.js -d
+// node seeder.js -i (insert)
+// node seeder.js -d (delete)
 if (process.argv[2] === "-i") {
   insertData();
 } else if (process.argv[2] === "-d") {
