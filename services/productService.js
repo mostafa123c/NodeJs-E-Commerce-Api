@@ -8,13 +8,33 @@ const Product = require("../models/productModel");
 // @route  GET /api/v1/products
 // @access Public
 exports.getProducts = asyncHandler(async (req, res) => {
+  // Filtering
+  const queryStringObj = { ...req.query };
+  const excludedFields = ["fields", "sort", "page", "limit"];
+  excludedFields.forEach((field) => delete queryStringObj[field]);
+
+  // Apply Filtering  using (gte , gt , lte , lt)
+  // {price: {$gte: 50}, ratingsAverage: {$gte: 4}}
+  let queryString = JSON.stringify(queryStringObj);
+  queryString = queryString.replace(
+    /\b(gte|gt|lte|lt)\b/g,
+    (match) => `$${match}`
+  );
+
+  // Pagination
   const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
+  const limit = req.query.limit * 1 || 50;
   const skip = (page - 1) * limit;
-  const products = await Product.find({})
+
+  // Build query
+  const mongooseQuery = Product.find(JSON.parse(queryString))
     .skip(skip)
     .limit(limit)
     .populate({ path: "category", select: "name -_id" });
+
+  // Excute query
+  const products = await mongooseQuery;
+
   res.status(200).json({ results: products.length, page, data: products });
 });
 
