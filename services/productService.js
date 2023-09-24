@@ -1,29 +1,10 @@
-const asyncHandler = require("express-async-handler");
 const Product = require("../models/productModel");
-const ApiFeatures = require("../utils/apiFeatures");
 const factory = require("./HandlersFactory");
 
 // @desc   Get All Products
 // @route  GET /api/v1/products
 // @access Public
-exports.getProducts = asyncHandler(async (req, res, next) => {
-  // Build query
-  const documentsCounts = await Product.countDocuments();
-  const apiFeatures = new ApiFeatures(Product.find(), req.query)
-    .paginate(documentsCounts)
-    .filter()
-    .search("Products")
-    .limitFields()
-    .sort();
-
-  // Excute query
-  const { mongooseQuery, paginationResult } = apiFeatures;
-  const products = await mongooseQuery;
-
-  res
-    .status(200)
-    .json({ results: products.length, paginationResult, data: products });
-});
+exports.getProducts = factory.getAll(Product, "Products");
 
 // @desc   Get Specific product By id
 // @route  GET /api/v1/products/:id
