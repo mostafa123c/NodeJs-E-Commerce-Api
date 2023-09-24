@@ -1,6 +1,4 @@
 const asyncHandler = require("express-async-handler");
-const slugify = require("slugify");
-const ApiError = require("../utils/apiError");
 const Category = require("../models/categoryModel");
 const ApiFeatures = require("../utils/apiFeatures");
 const factory = require("./HandlersFactory");
@@ -29,20 +27,12 @@ exports.getCategories = asyncHandler(async (req, res) => {
 // @desc   Get Specific Category By id
 // @route  GET /api/v1/categories/:id
 // @access Public
-exports.getCategory = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const category = await Category.findById(id);
-  if (!category) {
-    // res.status(404).json({ msg: `Category Not Found For id ${id}`});
-    return next(new ApiError(`Category Not Found For id ${id}`, 404));
-  }
-  res.status(200).json({ data: category });
-});
+exports.getCategory = factory.getOne(Category);
 
 // @desc   Create Category
 // @route  POST /api/v1/categories
 // @access Private
-exports.createCategory = factory.createOne(Category)
+exports.createCategory = factory.createOne(Category);
 
 // @desc   Update Category
 // @route  PUT /api/v1/categories/:id
