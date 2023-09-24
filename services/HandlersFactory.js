@@ -12,7 +12,7 @@ exports.deleteOne = (Model) =>
     res.status(204).send();
   });
 
-  exports.updateOne = (Model) =>
+exports.updateOne = (Model) =>
   asyncHandler(async (req, res, next) => {
     const document = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
@@ -52,7 +52,7 @@ exports.getOne = (Model, populationOpt) =>
     res.status(200).json({ data: document });
   });
 
-exports.getAll = (Model, modelName = '') =>
+exports.getAll = (Model, modelName = "") =>
   asyncHandler(async (req, res) => {
     let filter = {};
     if (req.filterObj) {

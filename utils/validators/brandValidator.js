@@ -14,7 +14,11 @@ exports.createBrandValidator = [
     .isLength({ min: 3 })
     .withMessage("brand name must be at least 3 characters long")
     .isLength({ max: 32 })
-    .withMessage("brand name must be at most 32 characters long"),
+    .withMessage("brand name must be at most 32 characters long")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   validatorMiddleware,
 ];
 

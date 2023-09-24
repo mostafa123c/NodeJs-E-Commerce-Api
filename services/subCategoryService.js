@@ -13,16 +13,7 @@ exports.setCategoryIdToBody = (req, res, next) => {
 // @desc   Create SubCategory
 // @route  POST /api/v1/subcategories
 // @access Private
-exports.createSubCategory = asyncHandler(async (req, res) => {
-  const { name, category } = req.body;
-  //async await
-  const subCategory = await SubCategory.create({
-    name,
-    slug: slugify(name),
-    category,
-  });
-  res.status(201).json({ data: subCategory });
-});
+exports.createSubCategory = factory.createOne(SubCategory);
 
 // Nested Route
 //@desc    Get all the subcategories of a particular Category
