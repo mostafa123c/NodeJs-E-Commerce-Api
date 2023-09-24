@@ -1,9 +1,9 @@
 const asyncHandler = require("express-async-handler");
 const slugify = require("slugify");
 const ApiError = require("../utils/apiError");
-
 const Product = require("../models/productModel");
 const ApiFeatures = require("../utils/apiFeatures");
+const factory = require("./HandlersFactory");
 
 // @desc   Get All Products
 // @route  GET /api/v1/products
@@ -55,31 +55,9 @@ exports.createProduct = asyncHandler(async (req, res) => {
 // @desc   Update product
 // @route  PUT /api/v1/products/:id
 // @access Private
-exports.updateProduct = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  if (req.body.title) {
-    req.body.slug = slugify(req.body.title);
-  }
-
-  const product = await Product.findOneAndUpdate({ _id: id }, req.body, {
-    new: true,
-  });
-
-  if (!product) {
-    return next(new ApiError(`product Not Found For id ${id}`, 404));
-  }
-  res.status(200).json({ data: product });
-});
+exports.updateProduct = factory.updateOne(Product);
 
 // @desc   Delete product
 // @route  DELETE /api/v1/products/:id
 // @access Private
-exports.deleteProduct = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const product = await Product.findByIdAndDelete(id);
-
-  if (!product) {
-    return next(new ApiError(`product Not Found For id ${id}`, 404));
-  }
-  res.status(204).send();
-});
+exports.deleteProduct = factory.deleteOne(Product);
