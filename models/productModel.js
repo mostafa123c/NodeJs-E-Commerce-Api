@@ -94,4 +94,29 @@ productSchema.pre(/^find/, function (next) {
   next();
 });
 
+const setImageURL = (doc) => {
+  // return Image base url + image name
+  if (doc.imageCover) {
+    const imageUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
+    doc.imageCover = imageUrl;
+  }
+  if (doc.images) {
+    const imageList = [];
+    doc.images.forEach((image) => {
+      const imageUrl = `${process.env.BASE_URL}/products/${image}`;
+      imageList.push(imageUrl);
+    });
+    doc.images = imageList;
+  }
+};
+// post middleware for  getOne ,getAll and Update
+productSchema.post("init", (doc) => {
+  setImageURL(doc);
+});
+
+// post middleware for create
+productSchema.post("save", (doc) => {
+  setImageURL(doc);
+});
+
 module.exports = mongoose.model("Product", productSchema);
