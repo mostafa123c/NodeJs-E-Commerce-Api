@@ -1,6 +1,4 @@
 const express = require("express");
-// eslint-disable-next-line import/no-extraneous-dependencies
-const multer = require("multer");
 const {
   getCategoryValidator,
   createCategoryValidator,
@@ -14,9 +12,8 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
+  uploadCategoryImage,
 } = require("../services/categoryService");
-
-const upload = multer({ dest: "uploads/categories" });
 
 const subCategoriesRoute = require("./subCategoryRoute");
 
@@ -27,16 +24,7 @@ router.use("/:categoryId/subcategories", subCategoriesRoute);
 router
   .route("/")
   .get(getCategories)
-  .post(
-    upload.single("image"),
-    (req, res, next) => {
-      console.log(req.file);
-      console.log(req.body);
-      next();
-    },
-    createCategoryValidator,
-    createCategory
-  );
+  .post(uploadCategoryImage, createCategoryValidator, createCategory);
 router
   .route("/:id")
   .get(getCategoryValidator, getCategory)
