@@ -1,5 +1,68 @@
+/* eslint-disable import/no-extraneous-dependencies */
+const multer = require("multer");
+const sharp = require("sharp");
+const { v4: uuidv4 } = require("uuid");
+const asyncHandler = require("express-async-handler");
+
+const ApiError = require("../utils/apiError");
 const Product = require("../models/productModel");
 const factory = require("./HandlersFactory");
+
+const multerStorage = multer.memoryStorage();
+// Filter
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    cb(new ApiError("Not an image! Please upload only images.", 400), false);
+  }
+};
+
+const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
+
+exports.uploadProductImages = upload.fields([
+  { name: "imageCover", maxCount: 1 },
+  { name: "images", maxCount: 5 },
+]);
+
+exports.resizeProductImages = asyncHandler(async (req, res, next) => {
+  // image processing for image cover
+  if (req.files.imageCover) {
+    const imageCoverFilename = `product-${uuidv4()}-${Date.now()}-cover.jpeg`;
+
+    await sharp(req.files.imageCover[0].buffer)
+      .resize(2000, 1333)
+      .toFormat("jpeg")
+      .jpeg({ quality: 95 })
+      .toFile(`uploads/products/${imageCoverFilename}`);
+
+    // Save Image Into DB
+    req.body.imageCover = imageCoverFilename;
+  }
+
+  // image processing for images
+  if (req.files.images) {
+    req.body.images = [];
+
+    await Promise.all(
+      req.files.images.map(async (img, index) => {
+        const imageFilename = `product-${uuidv4()}-${Date.now()}-${
+          index + 1
+        }.jpeg`;
+        await sharp(img.buffer)
+          .resize(2000, 1333)
+          .toFormat("jpeg")
+          .jpeg({ quality: 95 })
+          .toFile(`uploads/products/${imageFilename}`);
+
+        // Save Image Into DB
+        req.body.images.push(imageFilename);
+      })
+    );
+
+    next();
+  }
+});
 
 // @desc   Get All Products
 // @route  GET /api/v1/products
