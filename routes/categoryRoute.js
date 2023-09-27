@@ -6,6 +6,8 @@ const {
   deleteCategoryValidator,
 } = require("../utils/validators/categoryValidator");
 
+const AuthService = require("../services/authService");
+
 const {
   getCategories,
   getCategory,
@@ -26,6 +28,7 @@ router
   .route("/")
   .get(getCategories)
   .post(
+    AuthService.protect,
     uploadCategoryImage,
     resizeImage,
     createCategoryValidator,

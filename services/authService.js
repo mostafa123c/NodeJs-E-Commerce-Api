@@ -44,3 +44,20 @@ exports.login = asyncHandler(async (req, res, next) => {
   // 4) send response
   res.status(200).json({ data: user, token });
 });
+
+exports.protect = asyncHandler(async (req, res, next) => {
+  // 1) check if token exist , if exist get it
+  let token;
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith("Bearer")
+  ) {
+    token = req.headers.authorization.split(" ")[1];
+  }
+  if (!token) {
+    return next(new ApiError("Please login to access this route", 401));
+  }
+  // 2) verify token  (no change happen , expired token)
+  // 3) check if user exists
+  // 4) check if user change his password after token created
+});
