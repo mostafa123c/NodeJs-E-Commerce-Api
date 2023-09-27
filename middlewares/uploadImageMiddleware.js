@@ -1,7 +1,7 @@
 const multer = require("multer");
 const ApiError = require("../utils/apiError");
 
-exports.uploadSingleImage = (fieldName) => {
+const multerOptions = () => {
   // 1-DiskStorage engine
   // const multerStorage = multer.diskStorage({
   //   destination: function (req, file, cb) {
@@ -28,5 +28,10 @@ exports.uploadSingleImage = (fieldName) => {
 
   const upload = multer({ storage: multerStorage, fileFilter: multerFilter });
 
-  return upload.single(fieldName);
+  return upload;
 };
+
+exports.uploadSingleImage = (fieldName) => multerOptions().single(fieldName);
+
+exports.uploadMixOfImages = (arrayOfFields) =>
+  multerOptions().fields(arrayOfFields);
