@@ -1,6 +1,7 @@
 const { check, body } = require("express-validator");
 const slugify = require("slugify");
 const bcrypt = require("bcryptjs");
+
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/userModel");
 
@@ -69,6 +70,29 @@ exports.updateUserValidator = [
       req.body.slug = slugify(val);
       return true;
     }),
+
+  check("email")
+    .notEmpty()
+    .withMessage("User Email is required")
+    .isEmail()
+    .withMessage("Invalid Email Address")
+    .custom((val) =>
+      User.findOne({ email: val }).then((user) => {
+        if (user) {
+          return Promise.reject(new Error("Email already in use"));
+        }
+      })
+    ),
+
+  check("phone")
+    .optional()
+    .isMobilePhone(["ar-EG", "ar-SA"])
+    .withMessage("Invalid Phone Number only accepted egy and Sa Phone Numbers"),
+
+  check("profileImg").optional(),
+
+  check("role").optional(),
+
   validatorMiddleware,
 ];
 
