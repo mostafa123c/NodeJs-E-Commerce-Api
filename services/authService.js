@@ -60,5 +60,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
   // 2) verify token  (no change happen , expired token)
   const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   // 3) check if user exists
+  const user = await User.findById(decoded.userId);
+  if (!user) {
+    return next(new ApiError("User not found", 401));
+  }
   // 4) check if user change his password after token created
 });
