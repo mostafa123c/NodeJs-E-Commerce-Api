@@ -58,6 +58,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     return next(new ApiError("Please login to access this route", 401));
   }
   // 2) verify token  (no change happen , expired token)
+  const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
   // 3) check if user exists
   // 4) check if user change his password after token created
 });
