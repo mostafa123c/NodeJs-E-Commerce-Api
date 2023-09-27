@@ -1,6 +1,5 @@
-const { check, body } = require("express-validator");
+const { check } = require("express-validator");
 const slugify = require("slugify");
-const bcrypt = require("bcryptjs");
 
 const validatorMiddleware = require("../../middlewares/validatorMiddleware");
 const User = require("../../models/userModel");
@@ -44,6 +43,22 @@ exports.signupValidator = [
   check("passwordConfirm")
     .notEmpty()
     .withMessage("Confirm Password is required"),
+
+  validatorMiddleware,
+];
+
+exports.loginValidator = [
+  check("email")
+    .notEmpty()
+    .withMessage("User Email is required")
+    .isEmail()
+    .withMessage("Invalid Email Address"),
+
+  check("password")
+    .notEmpty()
+    .withMessage("Password is required")
+    .isLength({ min: 6 })
+    .withMessage("Password must be at least 6 characters long"),
 
   validatorMiddleware,
 ];
