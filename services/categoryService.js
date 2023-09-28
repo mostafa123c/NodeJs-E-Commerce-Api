@@ -39,15 +39,15 @@ exports.getCategory = factory.getOne(Category);
 
 // @desc   Create Category
 // @route  POST /api/v1/categories
-// @access Private
+// @access Private/Admin-Manager
 exports.createCategory = factory.createOne(Category);
 
 // @desc   Update Category
 // @route  PUT /api/v1/categories/:id
-// @access Private
+// @access Private/Admin-Manager
 exports.updateCategory = factory.updateOne(Category);
 
 // @desc   Delete Category
 // @route  DELETE /api/v1/categories/:id
-// @access Private
+// @access Private/Admin
 exports.deleteCategory = factory.deleteOne(Category);

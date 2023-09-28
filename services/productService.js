@@ -63,15 +63,15 @@ exports.getProduct = factory.getOne(Product);
 
 // @desc   Create product
 // @route  POST /api/v1/products
-// @access Private
+// @access Private/Admin-Manager
 exports.createProduct = factory.createOne(Product);
 
 // @desc   Update product
 // @route  PUT /api/v1/products/:id
-// @access Private
+// @access Private/Admin-Manager
 exports.updateProduct = factory.updateOne(Product);
 
 // @desc   Delete product
 // @route  DELETE /api/v1/products/:id
-// @access Private
+// @access Private/Admin
 exports.deleteProduct = factory.deleteOne(Product);
