@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
@@ -100,12 +101,30 @@ exports.allowedTo = (...roles) =>
     next();
   });
 
+// @desc    forgetPassword
+// @route   POST /api/v1/auth/forgetPassword
+// @access  Public
 exports.forgetPassword = asyncHandler(async (req, res, next) => {
-  // 1) Get User By email
+  // 1) Get Uoser By email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new ApiError(`There is no user with email ${req.body.email}`, 404));
+    return next(
+      new ApiError(`There is no user with email ${req.body.email}`, 404)
+    );
   }
-  // 2) If user exist , generate reset random 6 digits and save it in db
+  // 2) If user exist , generate hash reset random 6 digits and save it in db
+  const resetCode = Math.floor(Math.random() * 900000 + 100000).toString();
+  const hashedResetCode = crypto
+    .createHash("sha256")
+    .update(resetCode)
+    .digest("hex");
+
+  //Save hashed passwordReset Cose into DB
+  user.passwordResetCode = hashedResetCode;
+  user.passwordResetExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+  user.passwordResetVerified = false;
+
+  await user.save();
+
   // 3) Send the reset code via email
 });
