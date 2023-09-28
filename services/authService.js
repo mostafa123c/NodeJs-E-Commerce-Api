@@ -86,6 +86,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
   next();
 });
 
+// @desc   Authorization (User Permissions)
 // ["admin" , "manager"]
 exports.allowedTo = (...roles) =>
   asyncHandler(async (req, res, next) => {
@@ -98,3 +99,13 @@ exports.allowedTo = (...roles) =>
     }
     next();
   });
+
+exports.forgetPassword = asyncHandler(async (req, res, next) => {
+  // 1) Get User By email
+  const user = await User.findOne({ email: req.body.email });
+  if (!user) {
+    return next(new ApiError(`There is no user with email ${req.body.email}`, 404));
+  }
+  // 2) If user exist , generate reset random 6 digits and save it in db
+  // 3) Send the reset code via email
+});
