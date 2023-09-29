@@ -9,6 +9,7 @@ const {
   login,
   forgetPassword,
   verifyPasswordResetCode,
+  resetPassword,
 } = require("../services/authService");
 
 const router = express.Router();
@@ -17,6 +18,7 @@ router.post("/signup", signupValidator, signup);
 router.post("/login", loginValidator, login);
 router.post("/forgetPassword", forgetPassword);
 router.post("/verifyResetCode", verifyPasswordResetCode);
+router.put("/resetPassword", resetPassword);
 
 // router
 //   .route("/:id")
