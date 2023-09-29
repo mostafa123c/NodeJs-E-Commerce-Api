@@ -20,6 +20,7 @@ const {
   getLoggedUserData,
   updateLoggedUserPassword,
   updateLoggedUserData,
+  deleteLoggedUserData,
 } = require("../services/userService");
 
 const authService = require("../services/authService");
@@ -32,7 +33,7 @@ router.use(authService.protect);
 router.get("/getMe", getLoggedUserData, getUser);
 router.put("/changeMyPassword", updateLoggedUserPassword);
 router.put("/updateMe", updateLoggedUserValidator, updateLoggedUserData);
-
+router.delete("/deleteMe", deleteLoggedUserData);
 
 // can use middlewares in all routes with less code
 router.use(authService.allowedTo("admin", "manager"));

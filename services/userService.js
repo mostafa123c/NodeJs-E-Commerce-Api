@@ -140,3 +140,12 @@ exports.updateLoggedUserData = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({ data: user });
 });
+
+// @desc   Deactivate Logged User
+// @route  Delete /api/v1/users/deleteMe
+// @access Private/Protect
+exports.deleteLoggedUserData = asyncHandler(async (req, res, next) => {
+  await User.findByIdAndUpdate(req.user._id, { active: false });
+  res.status(204).json({ status: "success" });
+});
+
