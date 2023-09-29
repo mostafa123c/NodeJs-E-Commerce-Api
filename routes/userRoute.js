@@ -5,6 +5,7 @@ const {
   updateUserValidator,
   deleteUserValidator,
   changeUserPasswordValidator,
+  updateLoggedUserValidator,
 } = require("../utils/validators/userValidator");
 
 const {
@@ -18,17 +19,23 @@ const {
   changeUserPassword,
   getLoggedUserData,
   updateLoggedUserPassword,
+  updateLoggedUserData,
 } = require("../services/userService");
 
 const authService = require("../services/authService");
 
 const router = express.Router();
 
-router.get("/getMe", authService.protect, getLoggedUserData, getUser);
-router.put("/changeMyPassword", authService.protect, updateLoggedUserPassword);
+// all routes
+router.use(authService.protect);
+
+router.get("/getMe", getLoggedUserData, getUser);
+router.put("/changeMyPassword", updateLoggedUserPassword);
+router.put("/updateMe", updateLoggedUserValidator, updateLoggedUserData);
+
 
 // can use middlewares in all routes with less code
-router.use(authService.protect, authService.allowedTo("admin", "manager"));
+router.use(authService.allowedTo("admin", "manager"));
 
 router.put(
   "/changePassword/:id",
