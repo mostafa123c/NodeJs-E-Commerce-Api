@@ -17,6 +17,7 @@ const {
   resizeImage,
   changeUserPassword,
   getLoggedUserData,
+  updateLoggedUserPassword,
 } = require("../services/userService");
 
 const authService = require("../services/authService");
@@ -24,6 +25,7 @@ const authService = require("../services/authService");
 const router = express.Router();
 
 router.get("/getMe", authService.protect, getLoggedUserData, getUser);
+router.put("/changeMyPassword", authService.protect, updateLoggedUserPassword);
 
 // can use middlewares in all routes with less code
 router.use(authService.protect, authService.allowedTo("admin", "manager"));

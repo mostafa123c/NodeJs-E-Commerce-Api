@@ -6,8 +6,9 @@ const bcrypt = require("bcryptjs");
 
 const factory = require("./HandlersFactory");
 const { uploadSingleImage } = require("../middlewares/uploadImageMiddleware");
-const User = require("../models/userModel");
 const ApiError = require("../utils/apiError");
+const createToken = require("../utils/createToken");
+const User = require("../models/userModel");
 
 // Upload Single Image
 exports.uploadUserImage = uploadSingleImage("profileImg");
@@ -100,4 +101,24 @@ exports.deleteUser = factory.deleteOne(User);
 exports.getLoggedUserData = asyncHandler(async (req, res, next) => {
   req.params.id = req.user._id;
   next();
+});
+
+// @desc   Update Logged User Password
+// @route  PUT /api/v1/users/changeMyPassword
+// @access Private/Protect
+exports.updateLoggedUserPassword = asyncHandler(async (req, res, next) => {
+  // 1) Update user password based user payload (req.user._id)
+  const user = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      password: await bcrypt.hash(req.body.password, 12),
+      passwordChangedAt: Date.now(),
+    },
+    { new: true }
+  );
+
+  // 2) Generate Token
+  const token = createToken(user._id);
+
+  res.status(200).json({ data: user, token });
 });
