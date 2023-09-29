@@ -149,3 +149,20 @@ exports.deleteLoggedUserData = asyncHandler(async (req, res, next) => {
   res.status(204).json({ status: "success" });
 });
 
+// // @desc   Activate Logged User
+// // @route  Put /api/v1/users/activeMe
+// // @access Private/Protect
+// exports.activeLoggedUser = asyncHandler(async (req, res, next) => {
+//   // verify User Is Logged in
+//   if (!req.user) {
+//     return next(new ApiError("You are not logged in", 401));
+//   }
+//   //find user by email and phone
+//   const user = await User.findOne({
+//     $or: [{ email: req.body.email }, { phone: req.body.phone }],
+//   });
+//   // make active true
+//   await User.findByIdAndUpdate(user._id, { active: true });
+
+//   res.status(204).json({ status: "success" });
+// });
