@@ -13,7 +13,7 @@ const reviewSchema = new mongoose.Schema(
       min: [1, "min rating value is 1.0"],
       max: [5, "max rating value is 5.0"],
     },
-
+    // Parent Refrence (1 to many)
     product: {
       type: mongoose.Schema.ObjectId,
       ref: "Product",

@@ -40,12 +40,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    // // Embedded document
-    // addresses: {
-    //   title: String,
-    //   postalCode: Number,
-    //   street: String,
-    // },
+    // Child Refrence (1 to many)
+    wishlist: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
 
   { timestamps: true }
