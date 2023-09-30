@@ -47,6 +47,17 @@ const userSchema = new mongoose.Schema(
         ref: "Product",
       },
     ],
+    // embedded document (addresses)
+    addresses: [
+      {
+        id: { type: mongoose.Schema.Types.ObjectId },
+        alias: String, // home , work
+        details: String,
+        phone: String,
+        city: String,
+        postalCode: String,
+      },
+    ],
   },
 
   { timestamps: true }
