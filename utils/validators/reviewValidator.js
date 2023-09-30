@@ -12,7 +12,7 @@ exports.createReviewValidator = [
   check("user").isMongoId().withMessage("Invalid Review id format"),
   check("product")
     .isMongoId()
-    .withMessage("Invalid Review id format")
+    .withMessage("Invalid Product id format")
     .custom((val, { req }) =>
       // Check if logged user create review before
       Review.findOne({ user: req.user._id, product: req.body.product }).then(

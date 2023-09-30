@@ -18,7 +18,15 @@ const {
 
 const authService = require("../services/authService");
 
+const reviewsRoute = require("./reviewRoute");
+
 const router = express.Router();
+
+// Nested Route
+// POST    /products/fgfdgsdghdfsgdf/reviews    -> create
+// GET     /products/fgfdgsdghdfsgdf/reviews    -> get all
+// GET     /products/fgfdgsdghdfsgdf/reviews/gthgfjfg  ->get specific review
+router.use("/:productId/reviews", reviewsRoute);
 
 router
   .route("/")

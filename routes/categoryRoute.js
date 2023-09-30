@@ -22,6 +22,7 @@ const subCategoriesRoute = require("./subCategoryRoute");
 
 const router = express.Router();
 
+// Nested Route
 router.use("/:categoryId/subcategories", subCategoriesRoute);
 
 router
