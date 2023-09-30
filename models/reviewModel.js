@@ -26,4 +26,11 @@ const reviewSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// Populate user
+reviewSchema.pre(/^find/, function (next) {
+  this.populate({ path: "user", select: "name" });
+  next();
+});
+
 module.exports = mongoose.model("Review", reviewSchema);
