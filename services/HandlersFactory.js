@@ -9,8 +9,9 @@ exports.deleteOne = (Model) =>
     if (!document) {
       return next(new ApiError(`document Not Found For id ${id}`, 404));
     }
-    // Trigger "remove" event when update document
-    document.remove();
+
+    // Trigger "deleteOne" event when delete document
+    await document.deleteOne();
 
     res.status(204).send();
   });
