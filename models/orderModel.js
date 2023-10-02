@@ -25,6 +25,13 @@ const orderSchrma = new mongoose.Schema(
       default: 0,
     },
 
+    shippingAddress: {
+      details: String,
+      phone: String,
+      city: String,
+      postalCode: Number,
+    },
+
     shippingPrice: {
       type: Number,
       default: 0,
