@@ -62,4 +62,16 @@ const orderSchrma = new mongoose.Schema(
   { timestamps: true }
 );
 
+orderSchrma.pre(/^find/, function (next) {
+  this.populate({
+    path: "user",
+    select: "name email phone profileImg",
+  }).populate({
+    path: "cartItems.product",
+    select: "title imageCover",
+  });
+
+  next();
+});
+
 module.exports = mongoose.model("Order", orderSchrma);
