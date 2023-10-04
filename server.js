@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require("path");
 
 const express = require("express");
@@ -12,6 +13,7 @@ const globalError = require("./middlewares/errorMiddleware");
 const dbConnection = require("./config/database");
 // Routes
 const mountRoutes = require("./routes");
+const { webhookCheckout } = require("./services/orderService");
 
 // Connect to DB
 dbConnection();
@@ -25,6 +27,13 @@ app.options("*", cors());
 
 // Compress All Responses
 app.use(compression());
+
+// Checkout webhook
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  webhookCheckout
+);
 
 // Middlewares
 app.use(express.json());
